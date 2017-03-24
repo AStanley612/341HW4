@@ -38,10 +38,10 @@
   ("global", GLOBAL);
   
   (* Added Keywords *)
-  ("true", TBOOL);
-  ("false", FBOOL);
+  ("true", TRUE);
+  ("false", FALSE);
   ("new", NEW);
-  ("for", FOT);
+  ("for", FOR);
 
   (* Symbols *)
   ( ";", SEMI);
@@ -65,15 +65,14 @@
   ( ">>", RSHIFT);
   ( ">>>", URSHIFT);
   ( "<", LESS);
-  ( "<=", LEQ);
+  ( "<=", LESSEQ);
   ( ">", GREAT);
-  ( ">=", GEQ);
-  ( ">=", NOTEQ);
-  ( ">=", GEQ);
-  ( ">=", AND);
-  ( ">=", OR);
-  ( ">=", BAND);
-  ( ">=", BOR);
+  ( ">=", GREATEQ);
+  ( "!=", NOTEQ);
+  ( "&", AND);
+  ( "|", OR);
+  ( "[&]", BAND);
+  ( "[|]", BOR);
   
   ]
 
