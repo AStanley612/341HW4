@@ -51,8 +51,8 @@ let loc (startpos:Lexing.position) (endpos:Lexing.position) (elt:'a) : 'a node =
 %token OR       /* | */
 %token BAND     /* [&] */
 %token BOR      /* [|] */
-%token TRUE
-%token FALSE
+%token TRUE			/* true */
+%token FALSE		/* false */
 %token NEW      /* new */
 %token FOR      /* for */
 
@@ -152,7 +152,7 @@ exp:
 	| t=ty TRUE  					{ loc $startpos $endpos @@ CTrue t1 }								/* double check */ 
 	| t=ty FALSE  				{ loc $startpos $endpos @@ CFalse f }								/* double check */ 
 	| id=IDENT LPAREN elist=list(exp) RPAREN
-												{ loc $startpos $endpos @@ /* que */ }							/* double check */
+												{ loc $startpos $endpos @@ Id (id, elist) }					/* double check */
 	| NEW t=ty LBRACKET RBRACKET elist=list(exp)
 												{ loc $startpos $endpos @@ EArray a }								/* double check */
 	| NEW t=ty LBRACKET i=exp RBRACKET
@@ -179,7 +179,7 @@ stmt:
                         { loc $startpos $endpos @@ SCall (id, es) }
   | ifs=if_stmt         { ifs }
 	| FOR LPAREN vdecls=vdeclist SEMI e=exp SEMI s=stmt RPAREN b=block
-												{ loc $startpos $endpos @@ For(e, s, b) }
+												{ loc $startpos $endpos @@ For(e, s, b) }			/* double check */
   | RETURN SEMI         { loc $startpos $endpos @@ Ret(None) }
   | RETURN e=exp SEMI   { loc $startpos $endpos @@ Ret(Some e) }
   | WHILE LPAREN e=exp RPAREN b=block  
