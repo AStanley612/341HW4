@@ -178,7 +178,8 @@ stmt:
   | id=IDENT LPAREN es=separated_list(COMMA, exp) RPAREN SEMI
                         { loc $startpos $endpos @@ SCall (id, es) }
   | ifs=if_stmt         { ifs }
-	| FOR LPAREN vdecls=vdeclist SEMI e=exp SEMI s=stmt RPAREN body=block
+	| FOR LPAREN vdecls=vdeclist SEMI e=exp SEMI s=stmt RPAREN b=block
+												{ loc $startpos $endpos @@ For(e, s, b) }
   | RETURN SEMI         { loc $startpos $endpos @@ Ret(None) }
   | RETURN e=exp SEMI   { loc $startpos $endpos @@ Ret(Some e) }
   | WHILE LPAREN e=exp RPAREN b=block  
