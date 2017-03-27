@@ -236,12 +236,13 @@ let cmp_fdecl (c:Ctxt.t) (f:Ast.fdecl node) : Ll.fdecl * (Ll.gid * Ll.gdecl) lis
    - OAT arrays are always handled via pointers. A global array of arrays will
      be an array of pointers to arrays emitted as additional global declarations
  *)
+(* double check *)
 let rec cmp_gexp (e:Ast.exp node) : Ll.gdecl * (Ll.gid * Ll.gdecl) list =
-  (* N *)
-	(* S *)
 	| Ast.CNull -> Null				(* double check *)
 	| Ast.CTrue -> CBool			(* double check *)
 	| Ast.CFalse -> CBool			(* double check *)
+	| Ast.CInt -> CInt				(* double check *)
+	| Ast.CStr -> CStr				(* double check *)
 	(* Array *)
 
 
