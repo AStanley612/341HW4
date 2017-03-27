@@ -38,24 +38,23 @@ let loc (startpos:Lexing.position) (endpos:Lexing.position) (elt:'a) : 'a node =
 %token GLOBAL   /* global */
 
 /* Added tokens */
-%token TBOOL        /* bool */
-%token LSHIFT       /* << */
-%token RSHIFT       /* >> */
+%token TBOOL    /* bool */
+%token LSHIFT   /* << */
+%token RSHIFT   /* >> */
 %token URSHIFT  /* >>> */
-%token LESS         /* < */
+%token LESS     /* < */
 %token LESSEQ   /* <= */
-%token GREAT        /* > */
+%token GREAT    /* > */
 %token GREATEQ  /* >= */
-%token NOTEQ        /* != */
-%token AND          /* & */
-%token OR               /* | */
-%token BAND         /* [&] */
-%token BOR          /* [|] */
-%token TRUE
-%token FALSE
-%token NEW          /* new */
-%token FOR          /* for */
-
+%token NOTEQ    /* != */
+%token AND      /* & */
+%token OR       /* | */
+%token BAND     /* [&] */
+%token BOR      /* [|] */
+%token TRUE			/* true */
+%token FALSE		/* false */
+%token NEW      /* new */
+%token FOR      /* for */
                                                                    
 
 %left PLUS DASH
@@ -100,19 +99,30 @@ arglist:
     
 ty:
   | TVOID  { TVoid }
+	| TBOOL  { TBool }
   | TINT   { TInt }
   | r=rtyp { TRef r }
-
-
 
 rtyp:
   | TSTRING { RString }
   | t=ty LBRACKET RBRACKET { RArray t }
 
 %inline bop:
-  | PLUS   { Add }
-  | DASH   { Sub }
   | STAR   { Mul }
+	| PLUS   { Add }
+  | DASH   { Sub }
+	| LSHIFT { Shl }
+	| RSHIFT { Shr }
+	| URSHIFT { Sar}
+	| LESS	 { Lt }
+	| LESSEQ { Lte }
+	| GREAT  { Gt }
+	| GREATEQ { Gte }
+	| NOTEQ	 { Neq }
+	| AND		 { And }
+	| OR		 { Or }
+	| BAND	 { IAnd }
+	| BOR		 { IOr }
   | EQEQ   { Eq } 
 
 %inline uop:
@@ -122,23 +132,36 @@ rtyp:
 
 gexp:
   | t=ty NULL  { loc $startpos $endpos @@ CNull t }
-  | i=INT      { loc $startpos $endpos @@ CInt i } 
+  | i=INT      { loc $startpos $endpos @@ CInt i }
+	| t=ty TRUE  { loc $startpos $endpos @@ CTrue t }								/* double check */ 
+	| t=ty FALSE  { loc $startpos $endpos @@ CFalse t }								/* double check */ 
+	| t=ty LBRACKET RBRACKET g=list(gexp) {loc $startpos $endpos @@  GArray (t, g)}		/* double check */
+	/* n and s */ 
 
 lhs:  
   | id=IDENT            { loc $startpos $endpos @@ Id id }
   | e=exp LBRACKET i=exp RBRACKET
                         { loc $startpos $endpos @@ Index (e, i) }
 exp:
+  | id=IDENT            { loc $startpos $endpos @@ Id id }
   | i=INT               { loc $startpos $endpos @@ CInt i }
   | t=ty NULL           { loc $startpos $endpos @@ CNull t }
+	| t=ty TRUE  					{ loc $startpos $endpos @@ CTrue t }								/* double check */ 
+	| t=ty FALSE  				{ loc $startpos $endpos @@ CFalse t }								/* double check */ 
+	| id=IDENT LPAREN elist=list(exp) RPAREN
+												{ loc $startpos $endpos @@ Id (id, elist) }					/* double check */
+	| NEW t=ty LBRACKET RBRACKET elist=list(exp)
+												{ loc $startpos $endpos @@ EArray (t, elist) }			/* double check */
+	| NEW t=ty LBRACKET i=exp RBRACKET
+												{ loc $startpos $endpos @@ Index (t, i) }						/* double check */
   | e1=exp b=bop e2=exp { loc $startpos $endpos @@ Bop (b, e1, e2) }
   | u=uop e=exp         { loc $startpos $endpos @@ Uop (u, e) }
-  | id=IDENT            { loc $startpos $endpos @@ Id id }
   | e=exp LBRACKET i=exp RBRACKET
                         { loc $startpos $endpos @@ Index (e, i) }
   | id=IDENT LPAREN es=separated_list(COMMA, exp) RPAREN
                         { loc $startpos $endpos @@ Call (id,es) }
   | LPAREN e=exp RPAREN { e } 
+	/* n and s */
 
 vdecl:
   | VAR id=IDENT EQ init=exp { (id, init) }
@@ -149,6 +172,8 @@ stmt:
   | id=IDENT LPAREN es=separated_list(COMMA, exp) RPAREN SEMI
                         { loc $startpos $endpos @@ SCall (id, es) }
   | ifs=if_stmt         { ifs }
+	| FOR LPAREN v=separated_list(COMMA, vdecl)) SEMI e=exp SEMI s=stmt RPAREN b=block
+												{ loc $startpos $endpos @@ For(v, e, s, b) }			/* double check */
   | RETURN SEMI         { loc $startpos $endpos @@ Ret(None) }
   | RETURN e=exp SEMI   { loc $startpos $endpos @@ Ret(Some e) }
   | WHILE LPAREN e=exp RPAREN b=block  
