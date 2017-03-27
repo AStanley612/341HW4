@@ -133,10 +133,10 @@ rtyp:
 gexp:
   | t=ty NULL  { loc $startpos $endpos @@ CNull t }
   | i=INT      { loc $startpos $endpos @@ CInt i }
-	| t=ty TRUE  { loc $startpos $endpos @@ CTrue t }								/* double check */ 
-	| t=ty FALSE  { loc $startpos $endpos @@ CFalse t }								/* double check */ 
+	| s=STRING	 { loc $startpos $endpos @@ CStr s }																	/* double check */
+	| t=ty TRUE  { loc $startpos $endpos @@ CTrue t }																	/* double check */ 
+	| t=ty FALSE  { loc $startpos $endpos @@ CFalse t }																/* double check */ 
 	| t=ty LBRACKET RBRACKET g=list(gexp) {loc $startpos $endpos @@  GArray (t, g)}		/* double check */
-	/* n and s */ 
 
 lhs:  
   | id=IDENT            { loc $startpos $endpos @@ Id id }
@@ -145,6 +145,7 @@ lhs:
 exp:
   | id=IDENT            { loc $startpos $endpos @@ Id id }
   | i=INT               { loc $startpos $endpos @@ CInt i }
+	| s=STRING						{ loc $startpos $endpos @@ CStr s }									/* double check */ 
   | t=ty NULL           { loc $startpos $endpos @@ CNull t }
 	| t=ty TRUE  					{ loc $startpos $endpos @@ CTrue t }								/* double check */ 
 	| t=ty FALSE  				{ loc $startpos $endpos @@ CFalse t }								/* double check */ 
@@ -161,7 +162,6 @@ exp:
   | id=IDENT LPAREN es=separated_list(COMMA, exp) RPAREN
                         { loc $startpos $endpos @@ Call (id,es) }
   | LPAREN e=exp RPAREN { e } 
-	/* n and s */
 
 vdecl:
   | VAR id=IDENT EQ init=exp { (id, init) }
