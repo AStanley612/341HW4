@@ -238,12 +238,14 @@ let cmp_fdecl (c:Ctxt.t) (f:Ast.fdecl node) : Ll.fdecl * (Ll.gid * Ll.gdecl) lis
  *)
 (* double check *)
 let rec cmp_gexp (e:Ast.exp node) : Ll.gdecl * (Ll.gid * Ll.gdecl) list =
-	| Ast.CNull -> Null				(* double check *)
-	| Ast.CTrue -> CBool			(* double check *)
-	| Ast.CFalse -> CBool			(* double check *)
-	| Ast.CInt -> CInt				(* double check *)
-	| Ast.CStr -> CStr				(* double check *)
+  begin match e with
+  	| Ast.CNull -> Null				(* double check *)
+  	| Ast.CTrue -> CBool			(* double check *)
+  	| Ast.CFalse -> CBool			(* double check *)
+  	| Ast.CInt -> CInt				(* double check *)
+  	| Ast.CStr -> CStr				(* double check *)
 	(* Array *)
+  end
 
 
 (* Oat initial context ------------------------------------------------------ *)
