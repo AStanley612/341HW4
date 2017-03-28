@@ -207,6 +207,7 @@ and cmp_block (c:Ctxt.t) (rt:Ll.ty) (stmts:Ast.block) : stream =
    Only a small subset of OAT expressions can be used as global initializers
    in well-formed programs (The constructors starting with C). *)
 let cmp_global_ctxt (c:Ctxt.t) (p:Ast.prog) : Ctxt.t =
+  
   failwith "cmp_global_ctxt unimplemented"
 
 
@@ -238,7 +239,7 @@ let cmp_fdecl (c:Ctxt.t) (f:Ast.fdecl node) : Ll.fdecl * (Ll.gid * Ll.gdecl) lis
  *)
 (* double check *)
 let rec cmp_gexp (e:Ast.exp node) : Ll.gdecl * (Ll.gid * Ll.gdecl) list =
-  begin match e with
+  begin match e.elt with
   	| Ast.CNull -> Null				(* double check *)
   	| Ast.CTrue -> CBool			(* double check *)
   	| Ast.CFalse -> CBool			(* double check *)

@@ -133,10 +133,10 @@ rtyp:
 gexp:
   | t=ty NULL  { loc $startpos $endpos @@ CNull t }
   | i=INT      { loc $startpos $endpos @@ CInt i }
-	| s=STRING	 { loc $startpos $endpos @@ CStr s }																	/* double check */
-	| t=ty TRUE  { loc $startpos $endpos @@ CTrue t }																	/* double check */ 
-	| t=ty FALSE  { loc $startpos $endpos @@ CFalse t }																/* double check */ 
-	| t=ty LBRACKET RBRACKET g=list(gexp) {loc $startpos $endpos @@  GArray (t, g)}		/* double check */
+	| s=STRING	 { loc $startpos $endpos @@ CStr s }
+	| t=ty TRUE  { loc $startpos $endpos @@ CBool true } 
+	| t=ty FALSE  { loc $startpos $endpos @@ CBool false } 
+	| t=ty LBRACKET RBRACKET g=list(gexp) {loc $startpos $endpos @@  CArr (t, g)}
 
 lhs:  
   | id=IDENT            { loc $startpos $endpos @@ Id id }
@@ -145,16 +145,16 @@ lhs:
 exp:
   | id=IDENT            { loc $startpos $endpos @@ Id id }
   | i=INT               { loc $startpos $endpos @@ CInt i }
-	| s=STRING						{ loc $startpos $endpos @@ CStr s }									/* double check */ 
+	| s=STRING						{ loc $startpos $endpos @@ CStr s } 
   | t=ty NULL           { loc $startpos $endpos @@ CNull t }
-	| t=ty TRUE  					{ loc $startpos $endpos @@ CTrue t }								/* double check */ 
-	| t=ty FALSE  				{ loc $startpos $endpos @@ CFalse t }								/* double check */ 
+	| t=ty TRUE  					{ loc $startpos $endpos @@ CBool true }								/* double check */ 
+	| t=ty FALSE  				{ loc $startpos $endpos @@ CBool false }								/* double check */ 
 	| id=IDENT LPAREN elist=list(exp) RPAREN
-												{ loc $startpos $endpos @@ Id (id, elist) }					/* double check */
+												{ loc $startpos $endpos @@ Call (id, elist) }
 	| NEW t=ty LBRACKET RBRACKET elist=list(exp)
-												{ loc $startpos $endpos @@ EArray (t, elist) }			/* double check */
+												{ loc $startpos $endpos @@ CArr (t, elist) }			/* double check */
 	| NEW t=ty LBRACKET i=exp RBRACKET
-												{ loc $startpos $endpos @@ Index (t, i) }						/* double check */
+												{ loc $startpos $endpos @@ NewArr (t, i) }						/* double check */
   | e1=exp b=bop e2=exp { loc $startpos $endpos @@ Bop (b, e1, e2) }
   | u=uop e=exp         { loc $startpos $endpos @@ Uop (u, e) }
   | e=exp LBRACKET i=exp RBRACKET
@@ -172,8 +172,8 @@ stmt:
   | id=IDENT LPAREN es=separated_list(COMMA, exp) RPAREN SEMI
                         { loc $startpos $endpos @@ SCall (id, es) }
   | ifs=if_stmt         { ifs }
-	| FOR LPAREN v=separated_list(COMMA, vdecl)) SEMI e=exp SEMI s=stmt RPAREN b=block
-												{ loc $startpos $endpos @@ For(v, e, s, b) }			/* double check */
+	| FOR LPAREN v=separated_list(COMMA, vdecl) SEMI e=exp SEMI s=stmt RPAREN b=block
+												{ loc $startpos $endpos @@ For(v, Some e, Some s, b) }			/* double check */
   | RETURN SEMI         { loc $startpos $endpos @@ Ret(None) }
   | RETURN e=exp SEMI   { loc $startpos $endpos @@ Ret(Some e) }
   | WHILE LPAREN e=exp RPAREN b=block  
