@@ -162,7 +162,10 @@ let oat_alloc_array (t:Ast.ty) (size:Ll.operand) : Ll.ty * operand * stream =
 *)
 
 let rec cmp_exp (c:Ctxt.t) (exp:Ast.exp node) : Ll.ty * Ll.operand * stream =
-failwith "cmp_exp unimplemented"    
+	(* Mappings for TYP_INT, TYP_STRING, TYP_NULLSTR, TYP_NULLARR, TYP_TRUE, *)
+	(* TYP_FALSE, TYP_INDEX, TYP_CALL, TYP_ARRLIT, TYP_ARRZERO, TYP_BOP,*)
+	(* TYP_UOP all go here *)
+	failwith "cmp_exp unimplemented"    
 
 (* Compile a statement in context c with return typ rt. Return a new context,
    possibly extended with new local bindings, and the instruction stream
@@ -191,6 +194,8 @@ failwith "cmp_exp unimplemented"
 
  *)
 let rec cmp_stmt (c:Ctxt.t) (rt:Ll.ty) (stmt:Ast.stmt node) : Ctxt.t * stream =
+	(* Mappings for TYP_SDECL, TYP_ASSN, TYP_SCALL, TYP_IF, TYP_WHILE, TYP_FOR*)
+	(* TYP_RETT, TYP_RETVOID all go here *)
   failwith "cmp_stmt not implemented"
 
 (* Compile a series of statements *)
@@ -207,6 +212,7 @@ and cmp_block (c:Ctxt.t) (rt:Ll.ty) (stmts:Ast.block) : stream =
    Only a small subset of OAT expressions can be used as global initializers
    in well-formed programs (The constructors starting with C). *)
 let cmp_global_ctxt (c:Ctxt.t) (p:Ast.prog) : Ctxt.t =
+	(* The TYP_GLOBAL_CTXT, TYP_GFUN, and TYP_GVAR mappings all go here. *)
   failwith "cmp_global_ctxt unimplemented"
 
 
@@ -222,7 +228,8 @@ let cmp_global_ctxt (c:Ctxt.t) (p:Ast.prog) : Ctxt.t =
    4. Use cfg_of_stream to produce a LLVMlite cfg from 
  *)
 let cmp_fdecl (c:Ctxt.t) (f:Ast.fdecl node) : Ll.fdecl * (Ll.gid * Ll.gdecl) list =
-  failwith "cmp_fdecl not implemented"
+  (* Mapping w/ TYP_FDECL, TYP_VDECL, TYP_DECL goes here *)
+	failwith "cmp_fdecl not implemented"
 
 
 (* Compile a global initializer, returning the resulting LLVMlite global
