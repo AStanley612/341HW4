@@ -36,7 +36,7 @@ let parse_exp_tests =
   ; ("parse exp test 5", exp_test "1+(2+3)" (no_loc (Bop (Add,no_loc (CInt 1L),no_loc (Bop (Add,no_loc (CInt 2L),no_loc (CInt 3L)))))))
   ; ("parse exp test 6", exp_test "(1+2)*3" (no_loc (Bop (Mul,no_loc (Bop (Add,no_loc (CInt 1L),no_loc (CInt 2L))),no_loc (CInt 3L)))))
   ; ("parse exp test 7", exp_test "1+2*3+4" (no_loc (Bop (Add,no_loc (Bop (Add,no_loc (CInt 1L),no_loc (Bop (Mul,no_loc (CInt 2L),no_loc (CInt 3L))))),no_loc (CInt 4L)))))
-  ; ("parse exp test 8", exp_test "1-2 == 3+4" (no_loc (Bop (Eq,no_loc (Bop (Sub,no_loc (CInt 1L),no_loc (CInt 2L))),no_loc (Bop (Add,no_loc (CInt 3L),no_loc (CInt 4L)))))))
+  ; ("parse exp test 8", exp_test "1-2 == 3-4" (no_loc (Bop (Eq,no_loc (Bop (Sub,no_loc (CInt 1L),no_loc (CInt 2L))),no_loc (Bop (Sub,no_loc (CInt 3L),no_loc (CInt 4L)))))))
   ; ("parse exp test 9", exp_test "(1+2)*(3+4)" (no_loc (Bop (Mul,no_loc (Bop (Add,no_loc (CInt 1L),no_loc (CInt 2L))),no_loc (Bop (Add,no_loc (CInt 3L),no_loc (CInt 4L)))))))
   ; ("parse exp test 10", exp_test "true & true | false" (no_loc (Bop (Or,no_loc (Bop (And,no_loc (CBool true),no_loc (CBool true))),no_loc (CBool false)))))
   ; ("parse exp test 11", exp_test "true & (true | false)" (no_loc (Bop (And,no_loc (CBool true),no_loc (Bop (Or,no_loc (CBool true),no_loc (CBool false)))))))
@@ -81,12 +81,12 @@ let parse_file_test filepath ast =
   assert_eq_ast Astlib.eq_prog ast (fun () -> Driver.parse_oat_file filepath)
 
 let parse_prog_tests =
-  [ ("parse prog test 1", parse_file_test "atprograms/easy_p1.oat" Progasts.easy_p1_ast)
-  ; ("parse prog test 2", parse_file_test "atprograms/easy_p2.oat" Progasts.easy_p2_ast)
-  ; ("parse prog test 3", parse_file_test "atprograms/easy_p3.oat" Progasts.easy_p3_ast)
-  ; ("parse prog test 4", parse_file_test "atprograms/easy_p4.oat" Progasts.easy_p4_ast)
-  ; ("parse prog test 5", parse_file_test "atprograms/easy_p5.oat" Progasts.easy_p5_ast)
-  ; ("parse prog test 6", parse_file_test "atprograms/easy_p6.oat" Progasts.easy_p6_ast)
+  [ ("parse prog test 1", parse_file_test "hw4_temp/atprograms/easy_p1.oat" Progasts.easy_p1_ast)
+  ; ("parse prog test 2", parse_file_test "hw4_temp/atprograms/easy_p2.oat" Progasts.easy_p2_ast)
+  ; ("parse prog test 3", parse_file_test "hw4_temp/atprograms/easy_p3.oat" Progasts.easy_p3_ast)
+  ; ("parse prog test 4", parse_file_test "hw4_temp/atprograms/easy_p4.oat" Progasts.easy_p4_ast)
+  ; ("parse prog test 5", parse_file_test "hw4_temp/atprograms/easy_p5.oat" Progasts.easy_p5_ast)
+  ; ("parse prog test 6", parse_file_test "hw4_temp/atprograms/easy_p6.oat" Progasts.easy_p6_ast)
   ]
 
 let parse_tests = parse_consts
@@ -119,122 +119,122 @@ let executed_oat_file tests =
     tests
 
 let easiest_tests = [
-  ("atprograms/easyrun1.oat", "", "17");
-  ("atprograms/easyrun2.oat", "", "35");
-  ("atprograms/easyrun3.oat", "", "73");
-  ("atprograms/easyrun4.oat", "", "6");
-  ("atprograms/easyrun5.oat", "", "212");
-  ("atprograms/easyrun6.oat", "", "9");
-  ("atprograms/easyrun7.oat", "", "23");
-  ("atprograms/easyrun8.oat", "", "160");
-  ("atprograms/easyrun9.oat", "", "236");
-  ("atprograms/easyrun10.oat", "", "254");
+  ("hw4_temp/atprograms/easyrun1.oat", "", "17");
+  ("hw4_temp/atprograms/easyrun2.oat", "", "35");
+  ("hw4_temp/atprograms/easyrun3.oat", "", "73");
+  ("hw4_temp/atprograms/easyrun4.oat", "", "6");
+  ("hw4_temp/atprograms/easyrun5.oat", "", "212");
+  ("hw4_temp/atprograms/easyrun6.oat", "", "9");
+  ("hw4_temp/atprograms/easyrun7.oat", "", "23");
+  ("hw4_temp/atprograms/easyrun8.oat", "", "160");
+  ("hw4_temp/atprograms/easyrun9.oat", "", "236");
+  ("hw4_temp/atprograms/easyrun10.oat", "", "254");
 ]
 
 let globals_tests = [
-  ("atprograms/globals1.oat", "", "42");
-  ("atprograms/globals2.oat", "", "17");
-  ("atprograms/globals3.oat", "", "17");
-  ("atprograms/globals4.oat", "", "5");
-  ("atprograms/globals5.oat", "", "17");
-  ("atprograms/globals6.oat", "", "15");
+  ("hw4_temp/atprograms/globals1.oat", "", "42");
+  ("hw4_temp/atprograms/globals2.oat", "", "17");
+  ("hw4_temp/atprograms/globals3.oat", "", "17");
+  ("hw4_temp/atprograms/globals4.oat", "", "5");
+  ("hw4_temp/atprograms/globals5.oat", "", "17");
+  ("hw4_temp/atprograms/globals6.oat", "", "15");
 ]
 
 let path_tests = [
- ("atprograms/path1.oat", "", "17");
- ("atprograms/path2.oat", "", "35");
- ("atprograms/path3.oat", "", "3");
- ("atprograms/arrayargs1.oat", "", "17");
- ("atprograms/arrayargs2.oat", "", "17");
- ("atprograms/arrayargs3.oat", "", "34");
+ ("hw4_temp/atprograms/path1.oat", "", "17");
+ ("hw4_temp/atprograms/path2.oat", "", "35");
+ ("hw4_temp/atprograms/path3.oat", "", "3");
+ ("hw4_temp/atprograms/arrayargs1.oat", "", "17");
+ ("hw4_temp/atprograms/arrayargs2.oat", "", "17");
+ ("hw4_temp/atprograms/arrayargs3.oat", "", "34");
 ]
 
 let easy_tests = [
-    ("atprograms/run26.oat", "", "0");
-    ("atprograms/run27.oat", "", "99");
-    ("atprograms/run28.oat", "", "18");
-    ("atprograms/run29.oat", "", "1");
-    ("atprograms/run30.oat", "", "9");
-    ("atprograms/run31.oat", "", "9");
-    ("atprograms/run13.oat", "", "1");
-    ("atprograms/run32.oat", "", "33");
-    ("atprograms/run21.oat", "", "99");
-    ("atprograms/run33.oat", "", "1");
-    ("atprograms/run34.oat", "", "66");
-    ("atprograms/run35.oat", "", "66");
-    ("atprograms/run38.oat", "", "31");
-    ("atprograms/run39.oat", "a", "2");
-    ("atprograms/run40.oat", "", "8");
-    ("atprograms/run41.oat", "", "3");
-    ("atprograms/run42.oat", "", "2");
-    ("atprograms/run49.oat", "", "abc0");
-    ("atprograms/run50.oat", "", "abcde0");
-    ("atprograms/run60.oat", "", "85");
-    ("atprograms/run61.oat", "", "3410");
+    ("hw4_temp/atprograms/run26.oat", "", "0");
+    ("hw4_temp/atprograms/run27.oat", "", "99");
+    ("hw4_temp/atprograms/run28.oat", "", "18");
+    ("hw4_temp/atprograms/run29.oat", "", "1");
+    ("hw4_temp/atprograms/run30.oat", "", "9");
+    ("hw4_temp/atprograms/run31.oat", "", "9");
+    ("hw4_temp/atprograms/run13.oat", "", "1");
+    ("hw4_temp/atprograms/run32.oat", "", "33");
+    ("hw4_temp/atprograms/run21.oat", "", "99");
+    ("hw4_temp/atprograms/run33.oat", "", "1");
+    ("hw4_temp/atprograms/run34.oat", "", "66");
+    ("hw4_temp/atprograms/run35.oat", "", "66");
+    ("hw4_temp/atprograms/run38.oat", "", "31");
+    ("hw4_temp/atprograms/run39.oat", "a", "2");
+    ("hw4_temp/atprograms/run40.oat", "", "8");
+    ("hw4_temp/atprograms/run41.oat", "", "3");
+    ("hw4_temp/atprograms/run42.oat", "", "2");
+    ("hw4_temp/atprograms/run49.oat", "", "abc0");
+    ("hw4_temp/atprograms/run50.oat", "", "abcde0");
+    ("hw4_temp/atprograms/run60.oat", "", "85");
+    ("hw4_temp/atprograms/run61.oat", "", "3410");
 ]
 
 let medium_tests = [
-  ("atprograms/fact.oat", "", "1200");
-  ("atprograms/run1.oat", "", "153");
-  ("atprograms/run2.oat", "", "6");
-  ("atprograms/run3.oat", "", "2");
-  ("atprograms/run5.oat", "", "4");
-  ("atprograms/run8.oat", "", "2");
-  ("atprograms/run9.oat", "", "4");
-  ("atprograms/run10.oat", "", "5");
-  ("atprograms/run11.oat", "", "7");
-  ("atprograms/run14.oat", "", "16");
-  ("atprograms/run15.oat", "", "19");
-  ("atprograms/run16.oat", "", "13");
-  ("atprograms/run22.oat", "", "abc0");
-  ("atprograms/run23.oat", "", "1230");
-  ("atprograms/run25.oat", "", "nnn0");
-  ("atprograms/run43.oat", "", "42");
-  ("atprograms/run44.oat", "", "hello0");
-  ("atprograms/run45.oat", "", "420");
-  ("atprograms/run46.oat", "", "420");
-  ("atprograms/run47.oat", "", "3");
-  ("atprograms/run48.oat", "", "11");
-  ("atprograms/lib4.oat", "", "53220");
-  ("atprograms/lib5.oat", "", "20");
-  ("atprograms/lib6.oat", "", "56553");
-  ("atprograms/lib7.oat", "", "53");
-  ("atprograms/lib8.oat", "", "Hello world!0");
-  ("atprograms/lib9.oat", "a b c d", "abcd5");
-  ("atprograms/lib11.oat", "", "45");
-  ("atprograms/lib14.oat", "", "~}|{zyxwvu0");
-  ("atprograms/lib15.oat", "123456789", "456780");
+  ("hw4_temp/atprograms/fact.oat", "", "1200");
+  ("hw4_temp/atprograms/run1.oat", "", "153");
+  ("hw4_temp/atprograms/run2.oat", "", "6");
+  ("hw4_temp/atprograms/run3.oat", "", "2");
+  ("hw4_temp/atprograms/run5.oat", "", "4");
+  ("hw4_temp/atprograms/run8.oat", "", "2");
+  ("hw4_temp/atprograms/run9.oat", "", "4");
+  ("hw4_temp/atprograms/run10.oat", "", "5");
+  ("hw4_temp/atprograms/run11.oat", "", "7");
+  ("hw4_temp/atprograms/run14.oat", "", "16");
+  ("hw4_temp/atprograms/run15.oat", "", "19");
+  ("hw4_temp/atprograms/run16.oat", "", "13");
+  ("hw4_temp/atprograms/run22.oat", "", "abc0");
+  ("hw4_temp/atprograms/run23.oat", "", "1230");
+  ("hw4_temp/atprograms/run25.oat", "", "nnn0");
+  ("hw4_temp/atprograms/run43.oat", "", "42");
+  ("hw4_temp/atprograms/run44.oat", "", "hello0");
+  ("hw4_temp/atprograms/run45.oat", "", "420");
+  ("hw4_temp/atprograms/run46.oat", "", "420");
+  ("hw4_temp/atprograms/run47.oat", "", "3");
+  ("hw4_temp/atprograms/run48.oat", "", "11");
+  ("hw4_temp/atprograms/lib4.oat", "", "53220");
+  ("hw4_temp/atprograms/lib5.oat", "", "20");
+  ("hw4_temp/atprograms/lib6.oat", "", "56553");
+  ("hw4_temp/atprograms/lib7.oat", "", "53");
+  ("hw4_temp/atprograms/lib8.oat", "", "Hello world!0");
+  ("hw4_temp/atprograms/lib9.oat", "a b c d", "abcd5");
+  ("hw4_temp/atprograms/lib11.oat", "", "45");
+  ("hw4_temp/atprograms/lib14.oat", "", "~}|{zyxwvu0");
+  ("hw4_temp/atprograms/lib15.oat", "123456789", "456780");
 ]
 
 let hard_tests = [
-("atprograms/fac.oat", "", "120");
-("atprograms/qsort.oat", "", "kpyf{shomfhkmopsy{255");
-("atprograms/bsort.oat", "", "y}xotnuw notuwxy}255");
-("atprograms/msort.oat", "", "~}|{zyxwvu uvwxyz{|}~ 0");
-("atprograms/msort2.oat", "", "~}|{zyxwvu uvwxyz{|}~ 0");
-("atprograms/selectionsort.oat", "", "01253065992000");
-("atprograms/matrixmult.oat", "", "19 16 13 23 \t5 6 7 6 \t19 16 13 23 \t5 6 7 6 \t0");
+("hw4_temp/atprograms/fac.oat", "", "120");
+("hw4_temp/atprograms/qsort.oat", "", "kpyf{shomfhkmopsy{255");
+("hw4_temp/atprograms/bsort.oat", "", "y}xotnuw notuwxy}255");
+("hw4_temp/atprograms/msort.oat", "", "~}|{zyxwvu uvwxyz{|}~ 0");
+("hw4_temp/atprograms/msort2.oat", "", "~}|{zyxwvu uvwxyz{|}~ 0");
+("hw4_temp/atprograms/selectionsort.oat", "", "01253065992000");
+("hw4_temp/atprograms/matrixmult.oat", "", "19 16 13 23 \t5 6 7 6 \t19 16 13 23 \t5 6 7 6 \t0");
 ]
 
 let old_student_tests = [
-    ("atprograms/binary_search.oat", "", "Correct!0")
-  ; ("atprograms/xor_shift.oat", "", "838867572\n22817190600")
-  ; ("atprograms/sieve.oat", "", "25")
-  ; ("atprograms/count_sort.oat", "", "AFHZAAEYC\nAAACEFHYZ0")
-  ; ("atprograms/determinant_size2.oat", "", "94")
-  ; ("atprograms/fibo.oat", "", "0")
-  ; ("atprograms/bubble_sort.oat", "", "1")
-  ; ("atprograms/heap.oat", "", "1")
-  ; ("atprograms/binary_gcd.oat", "", "3")
-  ; ("atprograms/lfsr.oat", "", "TFTF FFTT0")
-  ; ("atprograms/gnomesort.oat", "", "01253065992000")
-  ; ("atprograms/josh_joyce_test.oat", "", "0")
-  ; ("atprograms/conquest.oat", "", "My name is Jeff...\nCharizard is the BEST Pokemon ever!!!11")
-  ; ("atprograms/gcd.oat", "", "16")
-  ; ("atprograms/life.oat", "", "00101001100101000")
-  ; ("atprograms/lcs.oat", "", "OAT0")
-  ; ("atprograms/insertion_sort.oat", "", "42")
-  ; ("atprograms/maxsubsequence.oat", "", "107")
+    ("hw4_temp/atprograms/binary_search.oat", "", "Correct!0")
+  ; ("hw4_temp/atprograms/xor_shift.oat", "", "838867572\n22817190600")
+  ; ("hw4_temp/atprograms/sieve.oat", "", "25")
+  ; ("hw4_temp/atprograms/count_sort.oat", "", "AFHZAAEYC\nAAACEFHYZ0")
+  ; ("hw4_temp/atprograms/determinant_size2.oat", "", "94")
+  ; ("hw4_temp/atprograms/fibo.oat", "", "0")
+  ; ("hw4_temp/atprograms/bubble_sort.oat", "", "1")
+  ; ("hw4_temp/atprograms/heap.oat", "", "1")
+  ; ("hw4_temp/atprograms/binary_gcd.oat", "", "3")
+  ; ("hw4_temp/atprograms/lfsr.oat", "", "TFTF FFTT0")
+  ; ("hw4_temp/atprograms/gnomesort.oat", "", "01253065992000")
+  ; ("hw4_temp/atprograms/josh_joyce_test.oat", "", "0")
+  ; ("hw4_temp/atprograms/conquest.oat", "", "My name is Jeff...\nCharizard is the BEST Pokemon ever!!!11")
+  ; ("hw4_temp/atprograms/gcd.oat", "", "16")
+  ; ("hw4_temp/atprograms/life.oat", "", "00101001100101000")
+  ; ("hw4_temp/atprograms/lcs.oat", "", "OAT0")
+  ; ("hw4_temp/atprograms/insertion_sort.oat", "", "42")
+  ; ("hw4_temp/atprograms/maxsubsequence.oat", "", "107")
 ]
 
 let tests : suite =

@@ -59,7 +59,7 @@ let loc (startpos:Lexing.position) (endpos:Lexing.position) (elt:'a) : 'a node =
 %left BAND BOR
 %left OR
 %left AND                                  
-%left EQ NOTEQ                                 
+%left EQEQ NOTEQ                                 
 %left LESS LESSEQ GREAT GREATEQ
 %left LSHIFT RSHIFT URSHIFT
 %left PLUS DASH
@@ -110,7 +110,7 @@ ty:
 
 rtyp:
   | TSTRING { RString }
-  | t=ty LBRACKET RBRACKET { RArray t }
+  /*| t=ty LBRACKET RBRACKET { RArray t }*/ 
 
 %inline bop:
   | STAR   { Mul }
@@ -139,8 +139,8 @@ gexp:
   | t=ty NULL  { loc $startpos $endpos @@ CNull t }
   | i=INT      { loc $startpos $endpos @@ CInt i }
 	| s=STRING	 { loc $startpos $endpos @@ CStr s }
-	| t=ty TRUE  { loc $startpos $endpos @@ CBool true } 
-	| t=ty FALSE  { loc $startpos $endpos @@ CBool false } 
+  | b=TRUE     { loc $startpos $endpos @@ CBool true }
+  | b=FALSE    { loc $startpos $endpos @@ CBool false }
 	| t=ty LBRACKET RBRACKET g=list(gexp) {loc $startpos $endpos @@  CArr (t, g)}
 
 lhs:  
@@ -152,8 +152,8 @@ exp:
   | i=INT               { loc $startpos $endpos @@ CInt i }
 	| s=STRING						{ loc $startpos $endpos @@ CStr s } 
   | t=ty NULL           { loc $startpos $endpos @@ CNull t }
-	| t=ty TRUE  					{ loc $startpos $endpos @@ CBool true }								/* double check */ 
-	| t=ty FALSE  				{ loc $startpos $endpos @@ CBool false }								/* double check */ 
+  | b=TRUE       { loc $startpos $endpos @@ CBool true}
+  | b=FALSE         { loc $startpos $endpos @@ CBool false}  
 	| id=IDENT LPAREN elist=list(exp) RPAREN
 												{ loc $startpos $endpos @@ Call (id, elist) }
 	| NEW t=ty LBRACKET RBRACKET elist=list(exp)

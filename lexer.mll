@@ -38,6 +38,7 @@
   ("global", GLOBAL);
   
   (* Added Keywords *)
+  ("bool", TBOOL);
   ("true", TRUE);
   ("false", FALSE);
   ("new", NEW);
@@ -148,7 +149,9 @@ rule token = parse
   | newline { newline lexbuf; token lexbuf }
 
   | ';' | ',' | '{' | '}' | '+' | '-' | '*' | '=' | "==" 
-  | "!=" | '!' | '~' | '(' | ')' | '[' | ']' 
+  | "!=" | '!' | '~' | '(' | ')' | '[' | ']'
+  | '&' | '|'| '>' | '<' | ">=" | "<=" | "[&]" | "[|]"
+  | ">>" | "<<" | ">>>"
     { create_token lexbuf }
 
   | _ as c { unexpected_char lexbuf c }
