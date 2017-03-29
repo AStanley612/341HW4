@@ -110,7 +110,7 @@ ty:
 
 rtyp:
   | TSTRING { RString }
-  | t=ty LBRACKET RBRACKET { RArray t }
+  /*| t=ty LBRACKET RBRACKET { RArray t }*/ 
 
 %inline bop:
   | STAR   { Mul }
@@ -138,10 +138,10 @@ rtyp:
 gexp:
   | t=ty NULL  { loc $startpos $endpos @@ CNull t }
   | i=INT      { loc $startpos $endpos @@ CInt i }
-    | s=STRING   { loc $startpos $endpos @@ CStr s }
+	| s=STRING	 { loc $startpos $endpos @@ CStr s }
   | b=TRUE     { loc $startpos $endpos @@ CBool true }
   | b=FALSE    { loc $startpos $endpos @@ CBool false }
-    | t=ty LBRACKET RBRACKET g=list(gexp) {loc $startpos $endpos @@  CArr (t, g)}
+	| t=ty LBRACKET RBRACKET g=list(gexp) {loc $startpos $endpos @@  CArr (t, g)}
 
 lhs:  
   | id=IDENT            { loc $startpos $endpos @@ Id id }
@@ -154,12 +154,12 @@ exp:
   | t=ty NULL           { loc $startpos $endpos @@ CNull t }
   | b=TRUE       { loc $startpos $endpos @@ CBool true}
   | b=FALSE         { loc $startpos $endpos @@ CBool false}  
-    | id=IDENT LPAREN elist=list(exp) RPAREN
-                                                { loc $startpos $endpos @@ Call (id, elist) }
-    | NEW t=ty LBRACKET RBRACKET elist=list(exp)
-                                                { loc $startpos $endpos @@ CArr (t, elist) }            /* double check */
-    | NEW t=ty LBRACKET i=exp RBRACKET
-                                                { loc $startpos $endpos @@ NewArr (t, i) }                      /* double check */
+	| id=IDENT LPAREN elist=list(exp) RPAREN
+												{ loc $startpos $endpos @@ Call (id, elist) }
+	| NEW t=ty LBRACKET RBRACKET elist=list(exp)
+												{ loc $startpos $endpos @@ CArr (t, elist) }			/* double check */
+	| NEW t=ty LBRACKET i=exp RBRACKET
+												{ loc $startpos $endpos @@ NewArr (t, i) }						/* double check */
   | e1=exp b=bop e2=exp { loc $startpos $endpos @@ Bop (b, e1, e2) }
   | u=uop e=exp         { loc $startpos $endpos @@ Uop (u, e) }
   | e=exp LBRACKET i=exp RBRACKET
