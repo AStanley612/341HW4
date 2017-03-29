@@ -38,6 +38,7 @@
   ("global", GLOBAL);
   
   (* Added Keywords *)
+  ("bool", TBOOL);
   ("true", TRUE);
   ("false", FALSE);
   ("new", NEW);
@@ -146,9 +147,12 @@ rule token = parse
   | digit+ | "0x" hexdigit+ { INT (Int64.of_string (lexeme lexbuf)) }
   | whitespace+ { token lexbuf }
   | newline { newline lexbuf; token lexbuf }
+    { create_token lexbuf }
 
   | ';' | ',' | '{' | '}' | '+' | '-' | '*' | '=' | "==" 
-  | "!=" | '!' | '~' | '(' | ')' | '[' | ']' 
+  | "!=" | '!' | '~' | '(' | ')' | '[' | ']'
+  | '&' | '|'| '>' | '<' | ">=" | "<=" | "[&]" | "[|]"
+  | ">>" | "<<" | ">>>"
     { create_token lexbuf }
 
   | _ as c { unexpected_char lexbuf c }
@@ -182,11 +186,11 @@ and directive state = parse
 
 and comments level = parse
   | "*/" { if level = 0 then token lexbuf
-	   else comments (level-1) lexbuf }
+       else comments (level-1) lexbuf }
   | "/*" { comments (level+1) lexbuf}
   | [^ '\n'] { comments level lexbuf }
   | "\n" { newline lexbuf; comments level lexbuf }
-  | eof	 { raise (Lexer_error (lex_long_range lexbuf,
+  | eof  { raise (Lexer_error (lex_long_range lexbuf,
              Printf.sprintf "comments are not closed")) }
 
 and string in_directive = parse
@@ -217,4 +221,3 @@ and escaped = parse
   | [^ '"' '\\' 't' 'n' '\'']
     { raise (Lexer_error (lex_long_range lexbuf,
         (Printf.sprintf "%s is an illegal escaped character constant" (lexeme lexbuf) ))) }
-
